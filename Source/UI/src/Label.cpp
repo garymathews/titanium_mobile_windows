@@ -47,8 +47,10 @@ namespace TitaniumWindows
 			label__->VerticalAlignment = Windows::UI::Xaml::VerticalAlignment::Center;
 			label__->FontSize = DefaultFontSize;
 
-			getViewLayoutDelegate<WindowsViewLayoutDelegate>()->setComponent(label__);
+			getViewLayoutDelegate<WindowsViewLayoutDelegate>()->set_defaultWidth(Titanium::UI::LAYOUT::FILL);
+			getViewLayoutDelegate<WindowsViewLayoutDelegate>()->set_defaultHeight(Titanium::UI::LAYOUT::FILL);
 
+			getViewLayoutDelegate<WindowsViewLayoutDelegate>()->setComponent(label__);
 		}
 
 		void Label::JSExportInitialize()
