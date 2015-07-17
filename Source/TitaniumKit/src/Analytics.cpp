@@ -48,6 +48,7 @@ namespace Titanium
 		JSExport<Analytics>::SetClassVersion(1);
 		JSExport<Analytics>::SetParent(JSExport<Module>::Class());
 
+		TITANIUM_ADD_PROPERTY(Analytics, _receivedResponse);
 		TITANIUM_ADD_PROPERTY_READONLY(Analytics, lastEvent);
 		TITANIUM_ADD_FUNCTION(Analytics, _start);
 		TITANIUM_ADD_FUNCTION(Analytics, featureEvent);
@@ -64,6 +65,19 @@ namespace Titanium
 		JSValue Object_property = Titanium.GetProperty("Analytics");
 		TITANIUM_ASSERT(Object_property.IsObject());  // precondition
 		return static_cast<JSObject>(Object_property);
+	}
+
+	TITANIUM_PROPERTY_GETTER(Analytics, _receivedResponse)
+	{
+		auto func = ti_analytics__.GetProperty("getReceivedResponse");
+		return static_cast<JSObject>(func)(get_context().get_global_object());
+	}
+
+	TITANIUM_PROPERTY_SETTER(Analytics, _receivedResponse)
+	{
+		auto func = ti_analytics__.GetProperty("setReceivedResponse");
+		static_cast<JSObject>(func)({argument}, get_context().get_global_object());
+		return true;
 	}
 
 	TITANIUM_PROPERTY_GETTER(Analytics, lastEvent)

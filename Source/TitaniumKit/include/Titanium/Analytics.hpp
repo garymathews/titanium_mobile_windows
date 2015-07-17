@@ -40,6 +40,7 @@ namespace Titanium
 		static void JSExportInitialize();
 		static JSObject GetStaticObject(const JSContext& js_context) TITANIUM_NOEXCEPT;
 
+		TITANIUM_PROPERTY_DEF(_receivedResponse);
 		TITANIUM_PROPERTY_READONLY_DEF(lastEvent);
 		TITANIUM_FUNCTION_DEF(_start);
 		TITANIUM_FUNCTION_DEF(featureEvent);

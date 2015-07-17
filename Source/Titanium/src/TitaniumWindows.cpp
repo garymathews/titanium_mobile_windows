@@ -251,10 +251,24 @@ namespace TitaniumWindows
 	{
 		auto deferral = e->SuspendingOperation->GetDeferral();
 
+		js_context__.JSEvaluateScript("Ti.Analytics._receivedResponse = false");
+
 		// Since we only have "suspending" event, we fires both pause and paused event.
 		GET_TITANIUM_APP(App);
 		App->fireEvent("pause");
 		App->fireEvent("paused");
+
+		// wait for Ti.Analytics to receive a response
+		auto retry_count = 0;
+		while (static_cast<bool>(js_context__.JSEvaluateScript("!Ti.Analytics._receivedResponse"))) {
+			Sleep(200);
+			retry_count++;
+
+			// wait for a maximum of 3000ms
+			if (retry_count > 15) {
+				break;
+			}
+		}
 
 		deferral->Complete();
 	}

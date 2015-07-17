@@ -10,7 +10,7 @@
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details.
  */
-var ANALYTICS_URL = 'https://api.appcelerator.com/p/v3/mobile-track/',
+var ANALYTICS_URL = 'http://172.16.2.115:8080/', //'https://api.appcelerator.com/p/v3/mobile-track/',
 	ANALYTICS_FILE = 'analytics.json',
 	SESSION_TIME_SEPARATION = 30,
 	RETRY_TIMEOUT = 3,
@@ -39,6 +39,7 @@ function Analytics() {
 	this.http = null;
 	this.timestamp = null;
 	this.lastEvent = {};
+	this.receivedResponse = false;
 }
 
 Analytics.prototype.loadEventQueue = function loadEventQueue() {
@@ -164,11 +165,12 @@ Analytics.prototype.postEvents = function postEvents() {
 		var _t = this,
 			retry = 0;
 		function post() {
-			if (_t.http == null) {
+		    if (_t.http == null) {
 				_t.http = Ti.Network.createHTTPClient({
 					onload: function (e) {
 						_t.eventQueue = [];
 						_t.saveEventQueue();
+						_t.receivedResponse = true;
 					},
 					onerror: function (e) {
 						retry++;
@@ -189,7 +191,10 @@ Analytics.prototype.postEvents = function postEvents() {
 		}
 		post();
 	} else {
-		this.saveEventQueue();
+	    this.saveEventQueue();
+
+        // offline so dont wait for a response
+	    _t.receivedResponse = true;
 	}
 };
 
@@ -236,5 +241,11 @@ this.exports = {
 	},
 	lastEvent: function () {
 		return analytics.lastEvent;
-	}
+	},
+    getReceivedResponse: function () {
+        return analytics.receivedResponse;
+    },
+    setReceivedResponse: function (value) {
+        analytics.receivedResponse = value;
+    }
 };
