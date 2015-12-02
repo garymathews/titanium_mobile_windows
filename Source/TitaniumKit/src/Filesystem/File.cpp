@@ -129,20 +129,17 @@ namespace Titanium
 
 		bool File::append(const std::string& data) TITANIUM_NOEXCEPT
 		{
-			TITANIUM_LOG_WARN("File::append(string): Unimplemented");
-			return false;
+			return write(data, true);
 		}
 
 		bool File::append(const std::shared_ptr<Titanium::Blob>& data) TITANIUM_NOEXCEPT
 		{
-			TITANIUM_LOG_WARN("File::append(Blob): Unimplemented");
-			return false;
+			return write(data, true);
 		}
 
 		bool File::append(const std::shared_ptr<File>& data) TITANIUM_NOEXCEPT
 		{
-			TITANIUM_LOG_WARN("File::append(File): Unimplemented");
-			return false;
+			return write(data, true);
 		}
 
 		bool File::copy(const std::string& dest) TITANIUM_NOEXCEPT

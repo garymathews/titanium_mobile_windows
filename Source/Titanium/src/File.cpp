@@ -213,11 +213,8 @@ namespace TitaniumWindows
 			return path_;
 		}
 
-		std::shared_ptr<Titanium::Filesystem::File> File::get_parent() const TITANIUM_NOEXCEPT
+		std::shared_ptr<Titanium::Filesystem::File> File::get_file_ptr(const std::string& path) const TITANIUM_NOEXCEPT
 		{
-			const std::string path = path_;
-			const std::string parent = path.substr(0, path.find_last_of("\\"));
-
 			JSValue Titanium_property = get_context().get_global_object().GetProperty("Titanium");
 			TITANIUM_ASSERT(Titanium_property.IsObject());  // precondition
 			JSObject Titanium = static_cast<JSObject>(Titanium_property);
@@ -230,7 +227,15 @@ namespace TitaniumWindows
 			TITANIUM_ASSERT(File_property.IsObject());  // precondition
 			JSObject File = static_cast<JSObject>(File_property);
 
-			return File.CallAsConstructor(parent).GetPrivate<Titanium::Filesystem::File>();
+			return File.CallAsConstructor(path).GetPrivate<Titanium::Filesystem::File>();
+		}
+
+		std::shared_ptr<Titanium::Filesystem::File> File::get_parent() const TITANIUM_NOEXCEPT
+		{
+			const std::string path = path_;
+			const std::string parent = path.substr(0, path.find_last_of("\\"));
+
+			return get_file_ptr(parent);
 		}
 
 		bool File::get_readonly() const TITANIUM_NOEXCEPT
@@ -364,17 +369,17 @@ namespace TitaniumWindows
 			std::vector<std::string> contents = getDirectoryListing();
 			for (size_t i = 0; i < contents.size(); i++) {
 				auto value = contents.at(i);
-				// FIXME We need to get handles on the sub-folders/files!
-				//auto native_file = static_cast<JSObject>(value).GetPrivate<Titanium::Filesystem::File>();
-				//if (native_file->isDirectory()) {
-				//	if (!native_file->deleteDirectory(recursive)) {
-				//		return false;
-				//	}
-				//} else {
-				//	if (!native_file->deleteFile()) {
-				//		return false;
-				//	}
-				//}
+				auto file = get_file_ptr(path_ + "\\" + value);
+
+				if (file->isDirectory()) {
+					if (!file->deleteDirectory(recursive)) {
+						return false;
+					}
+				} else {
+					if (!file->deleteFile()) {
+						return false;
+					}
+				}
 			}
 
 			return deleteFile();
