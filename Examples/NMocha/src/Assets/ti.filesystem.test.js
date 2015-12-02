@@ -453,6 +453,38 @@ describe('Titanium.Filesystem.File', function () {
         finish();
     });
 
+    // recursive deleteDirectory
+    it('deleteDirectory_recursive', function (finish) {
+        var dir = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'testDir');
+        should(dir.exists()).be.false;
+        should(dir.createDirectory()).be.true;
+        should(dir.exists()).be.true;
+
+        var file = Ti.Filesystem.getFile(dir.resolve(), 'test.txt');
+        should(file.exists()).be.false;
+        should(file.write('Appcelerator')).be.true;
+        should(file.exists()).be.true;
+
+        var subDir = Ti.Filesystem.getFile(dir.resolve(), 'subDir');
+        should(subDir.exists()).be.false;
+        should(subDir.createDirectory()).be.true;
+        should(subDir.exists()).be.true;
+
+        var subFile = Ti.Filesystem.getFile(subDir.resolve(), 'subTest.txt');
+        should(subFile.exists()).be.false;
+        should(subFile.write('Appcelerator')).be.true;
+        should(subFile.exists()).be.true;
+
+        should(dir.deleteDirectory(true)).be.true;
+
+        should(subFile.exists()).be.false;
+        should(subDir.exists()).be.false;
+        should(file.exists()).be.false;
+        should(dir.exists()).be.false;
+        
+        finish();
+    });
+
     // createFile and deleteFile
     it('createFile_and_deleteFile', function (finish) {
         var newFile = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'myfile');
@@ -596,6 +628,77 @@ describe('Titanium.Filesystem.File', function () {
         should(to.exists()).be.true;
 
         should(to.write(from.read(), true)).be.true;
+
+        var blob = to.read();
+        should(blob).be.ok; // not null or undefined.
+        should(blob.size > 0).be.true;
+        should(blob.text.length > 0).be.true;
+        should(blob.text).be.eql('AppceleratorAppcelerator');
+
+        should(from.deleteFile()).be.true;
+        should(from.exists()).be.false;
+        should(to.deleteFile()).be.true;
+        should(to.exists()).be.false;
+
+        finish();
+    });
+
+    // File.append String
+    it('append_String', function (finish) {
+        var msg = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'write_test.txt');
+        should(msg.write('Appcelerator', false)).be.true;
+        should(msg.exists()).be.true;
+
+        should(msg.append('Appcelerator')).be.true;
+
+        var blob = msg.read();
+        should(blob).be.ok; // not null or undefined.
+        should(blob.size > 0).be.true;
+        should(blob.text.length > 0).be.true;
+        should(blob.text).be.eql('AppceleratorAppcelerator');
+
+        should(msg.deleteFile()).be.true;
+        should(msg.exists()).be.false;
+        finish();
+    });
+
+    // File.append File
+    it('append_File', function (finish) {
+        var from = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'write_test.txt');
+        should(from.write('Appcelerator', false)).be.true;
+        should(from.exists()).be.true;
+
+        var to = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'write_test_to.txt');
+        should(to.write('Appcelerator', false)).be.true;
+        should(to.exists()).be.true;
+
+        should(to.append(from)).be.true;
+
+        var blob = to.read();
+        should(blob).be.ok; // not null or undefined.
+        should(blob.size > 0).be.true;
+        should(blob.text.length > 0).be.true;
+        should(blob.text).be.eql('AppceleratorAppcelerator');
+
+        should(from.deleteFile()).be.true;
+        should(from.exists()).be.false;
+        should(to.deleteFile()).be.true;
+        should(to.exists()).be.false;
+
+        finish();
+    });
+
+    // File.append Blob
+    it('append_Blob', function (finish) {
+        var from = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'write_test.txt');
+        should(from.write('Appcelerator', false)).be.true;
+        should(from.exists()).be.true;
+
+        var to = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'write_test_to.txt');
+        should(to.write('Appcelerator', false)).be.true;
+        should(to.exists()).be.true;
+
+        should(to.append(from.read())).be.true;
 
         var blob = to.read();
         should(blob).be.ok; // not null or undefined.
