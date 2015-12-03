@@ -35,7 +35,6 @@ namespace TitaniumWindows
 			virtual bool get_hidden() const TITANIUM_NOEXCEPT override;
 			virtual std::string get_name() const TITANIUM_NOEXCEPT override;
 			virtual std::string get_nativePath() const TITANIUM_NOEXCEPT override;
-			virtual std::shared_ptr<Titanium::Filesystem::File> File::get_file_ptr(const std::string& path) const TITANIUM_NOEXCEPT;
 			virtual std::shared_ptr<Titanium::Filesystem::File> get_parent() const TITANIUM_NOEXCEPT override;
 			virtual bool get_readonly() const TITANIUM_NOEXCEPT override;
 			virtual bool get_remoteBackup() const TITANIUM_NOEXCEPT override;
@@ -47,7 +46,6 @@ namespace TitaniumWindows
 			virtual bool createDirectory() TITANIUM_NOEXCEPT override;
 			virtual bool createFile() TITANIUM_NOEXCEPT override;
 			virtual std::chrono::milliseconds createTimestamp() TITANIUM_NOEXCEPT override;
-			virtual bool deleteDirectory(const bool& recursive) TITANIUM_NOEXCEPT override;
 			virtual bool deleteFile() TITANIUM_NOEXCEPT override;
 			virtual bool exists() TITANIUM_NOEXCEPT override;
 			virtual std::string extension() TITANIUM_NOEXCEPT override;

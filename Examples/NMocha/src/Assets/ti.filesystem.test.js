@@ -476,10 +476,6 @@ describe('Titanium.Filesystem.File', function () {
         should(subFile.exists()).be.true;
 
         should(dir.deleteDirectory(true)).be.true;
-
-        should(subFile.exists()).be.false;
-        should(subDir.exists()).be.false;
-        should(file.exists()).be.false;
         should(dir.exists()).be.false;
         
         finish();

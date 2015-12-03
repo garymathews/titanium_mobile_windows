@@ -7,6 +7,7 @@
 #include "Titanium/Filesystem/File.hpp"
 #include "Titanium/detail/TiImpl.hpp"
 #include "Titanium/Filesystem/FileStream.hpp"
+#include "Titanium/FilesystemModule.hpp"
 #include "Titanium/Blob.hpp"
 #include <type_traits>
 
@@ -168,8 +169,35 @@ namespace Titanium
 
 		bool File::deleteDirectory(const bool& recursive) TITANIUM_NOEXCEPT
 		{
-			TITANIUM_LOG_WARN("File::deleteDirectory: Unimplemented");
-			return false;
+			if (!isDirectory()) {
+				return false;
+			}
+			if (!recursive) {
+				return deleteFile();
+			}
+
+			const auto js_filesystem = get_context().JSEvaluateScript("Ti.Filesystem");
+			TITANIUM_ASSERT(js_filesystem.IsObject());
+			const auto filesystem_obj = static_cast<JSObject>(js_filesystem).CallAsConstructor();
+			const auto Filesystem = filesystem_obj.GetPrivate<Titanium::FilesystemModule>();
+
+			std::vector<std::string> contents = getDirectoryListing();
+			for (size_t i = 0; i < contents.size(); i++) {
+				auto value = contents.at(i);
+				auto file = Filesystem->getFile(get_context(), resolve() + Filesystem->separator() + value);
+
+				if (file->isDirectory()) {
+					if (!file->deleteDirectory(recursive)) {
+						return false;
+					}
+				} else {
+					if (!file->deleteFile()) {
+						return false;
+					}
+				}
+			}
+
+			return deleteFile();
 		}
 
 		bool File::deleteFile() TITANIUM_NOEXCEPT
