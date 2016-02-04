@@ -208,6 +208,16 @@ function getDeviceId(sdkVersion, target, next) {
 
 		if (target === WP_EMULATOR) {
 			deviceId = results.emulators && results.emulators[sdkVersion] && results.emulators[sdkVersion][0] && results.emulators[sdkVersion][0].udid;
+
+			for(i in results.emulators[sdkVersion]) {
+				var emulator = results.emulators[sdkVersion][i];
+				if (/^10\.0\.10586/.test(emulator.uapVersion)) {
+					deviceId = emulator.udid;
+					console.log('Found 10.0.10586 Emulator : ' + deviceId);
+					break;
+				}
+			}
+
 		} else {
 			deviceId = '0'; // assume device
 			// TODO What about for ws-local?
