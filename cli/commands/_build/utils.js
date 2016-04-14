@@ -45,7 +45,15 @@ function getTargetDevices() {
 		}, this);
 		return this.deviceCache;
 	} else if (target === 'wp-device' && Array.isArray(this.windowsInfo.devices)) {
-		return this.deviceCache = this.windowsInfo.devices;
+		var devices = this.windowsInfo.devices;
+		for (var d in devices) {
+			var device = devices[d];
+			// only list local devices
+			if (device.ip && device.ip !== "127.0.0.1") {
+				devices.splice(d, 1);
+			}
+		}
+		return this.deviceCache = devices;
 	}
 
 	return [];
