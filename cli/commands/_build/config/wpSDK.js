@@ -10,11 +10,14 @@ var appc = require('node-appc'),
  * @returns {Object}
  */
 module.exports = function configOptionWPSDK(order) {
-	var defaultTarget = '8.1';
+	var defaultTarget = '8.1',
+		sdkTargets = [],
+		unsupportedTargets = ['8.0'];
 
-	var sdkTargets = [];
 	for (var version in this.windowsInfo.windowsphone) {
-		sdkTargets.push(version);
+		if (unsupportedTargets.indexOf(version) === -1) {
+			sdkTargets.push(version);
+		}
 		if (this.windowsInfo.windowsphone[version].selected) {
 			defaultTarget = version;
 		}
