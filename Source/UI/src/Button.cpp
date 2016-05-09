@@ -28,7 +28,7 @@ namespace TitaniumWindows
 
 		void Button::postCallAsConstructor(const JSContext& js_context, const std::vector<JSValue>& arguments)
 		{
-			Titanium::UI::Button::postCallAsConstructor(js_context, arguments);	
+			Titanium::UI::Button::postCallAsConstructor(js_context, arguments);
 			button__ = ref new Controls::Button();
 			Titanium::UI::Button::setLayoutDelegate<WindowsButtonLayoutDelegate>();
 
@@ -61,8 +61,8 @@ namespace TitaniumWindows
 		{
 			Titanium::UI::Button::set_color(colorName);
 
-			// Just call set_backgroundColor behind the scenes...and it should just work.
-			getViewLayoutDelegate<WindowsViewLayoutDelegate>()->set_backgroundColor(colorName);
+			const auto color_obj = WindowsViewLayoutDelegate::ColorForName(colorName);
+			button__->Foreground = ref new Windows::UI::Xaml::Media::SolidColorBrush(color_obj);
 		}
 
 		void Button::set_image(const std::string& image) TITANIUM_NOEXCEPT
