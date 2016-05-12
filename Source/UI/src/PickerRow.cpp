@@ -36,6 +36,9 @@ namespace TitaniumWindows
 			item__  = ref new ComboBoxItem();
 			label__ = ref new TextBlock();
 			item__->Content = label__;
+
+			Titanium::UI::PickerRow::setLayoutDelegate<WindowsViewLayoutDelegate>();
+			getViewLayoutDelegate<WindowsViewLayoutDelegate>()->setComponent(item__, nullptr, false);
 		}
 
 		void PickerRow::set_color(const std::string& colorName) TITANIUM_NOEXCEPT
