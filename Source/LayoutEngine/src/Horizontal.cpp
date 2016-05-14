@@ -235,13 +235,21 @@ namespace Titanium
 
 			// Width rule calculation
 			if (widthType == Size) {
-				x1 = x2 = x3 = NAN;
+				if (leftType != None && rightType != None) {
+					x2 = 1;
+					leftType == Percent && (x1 -= leftValue);
+					leftType == Fixed && (x3 -= leftValue);
+					rightType == Percent && (x1 -= rightValue);
+					rightType == Fixed && (x3 -= rightValue);
+				} else {
+					x1 = x2 = x3 = NAN;
+				}
 			} else if (widthType == Fill) {
 				x2 = 1;
-				leftType == Percent&&(x1 = -leftValue);
-				leftType == Fixed&&(x3 = -leftValue);
-				rightType == Percent&&(x1 = -rightValue);
-				rightType == Fixed&&(x3 = -rightValue);
+				leftType == Percent&&(x1 -= leftValue);
+				leftType == Fixed&&(x3 -= leftValue);
+				rightType == Percent&&(x1 -= rightValue);
+				rightType == Fixed&&(x3 -= rightValue);
 			} else if (widthType == Percent) {
 				x1 = widthValue;
 			} else if (widthType == Fixed) {
