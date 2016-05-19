@@ -303,65 +303,9 @@ namespace TitaniumWindows
 	}
 	std::string Platform::username() const TITANIUM_NOEXCEPT
 	{
-#if defined(IS_WINDOWS_10)
-
-		Windows::System::UserProfile::UserProfilePersonalizationSettings;
-
-		using namespace Windows::Foundation::Collections;
-		using namespace Windows::System;
-
-		::Platform::String^ username;
-		concurrency::event evt;
-		concurrency::create_task(Windows::System::User::FindAllAsync(UserType::LocalUser, UserAuthenticationStatus::LocallyAuthenticated)).then([&evt, &username](concurrency::task<IVectorView<User^>^> task) {
-			try {
-				const auto users = task.get();
-				if (users->Size > 0) {
-					// let's get the first one
-					const auto user = users->GetAt(0);
-					concurrency::create_task(user->GetPropertyAsync(KnownUserProperties::DisplayName)).then([&evt, &username](concurrency::task<::Platform::Object^> task) {
-						try {
-							username = task.get()->ToString();
-						} catch (::Platform::COMException^ e) {
-							TITANIUM_LOG_WARN("Failed to get username", TitaniumWindows::Utility::ConvertString(e->Message));
-						}
-						evt.set();
-					});
-				} else {
-					// not found, let's bail out
-					evt.set();
-				}
-			} catch (::Platform::COMException^ e) {
-				TITANIUM_LOG_WARN("Failed to get username", TitaniumWindows::Utility::ConvertString(e->Message));
-				evt.set();
-			}
-		}, concurrency::task_continuation_context::use_arbitrary());
-		evt.wait();
-
-		return TitaniumWindows::Utility::ConvertString(username);
-#else
-		using namespace Windows::System::UserProfile;
-		if (UserInformation::NameAccessAllowed) {
-			::Platform::String^ name;
-			concurrency::event event;
-			concurrency::task<::Platform::String^>(UserInformation::GetDisplayNameAsync()).then([&name, &event](concurrency::task<::Platform::String^> task) {
-					try {
-						name = task.get();
-					}
-					catch (::Platform::COMException^ ce) {
-						//TITANIUM_LOG_ERROR(ce->Message);
-						name = "";
-					}
-					catch (...) {}
-					event.set();
-				},
-				concurrency::task_continuation_context::use_arbitrary());
-			event.wait();
-			return TitaniumWindows::Utility::ConvertString(name);
-		} else {
-			TITANIUM_LOG_ERROR("Access to account name disabled by Privacy Setting or Group Policy");
-			return "";
-		}
-#endif
+		const auto info = ref new Windows::Security::ExchangeActiveSyncProvisioning::EasClientDeviceInformation();
+		const auto name = info->FriendlyName;
+		return TitaniumWindows::Utility::ConvertString(name);
 	}
 	std::string Platform::version() const TITANIUM_NOEXCEPT
 	{
