@@ -286,7 +286,8 @@ function generateAppxManifestForPlatform(target, properties) {
 			'microphone',
 			'location'
 		],
-		capabilities = [];
+		capabilities = [],
+		deviceCapabilities = [];
 
 	// Supported properties
 	properties.Properties = properties.Properties || [];
@@ -318,10 +319,14 @@ function generateAppxManifestForPlatform(target, properties) {
 			else {
 				// Just write the XML out as is
 				// TODO Do some validation of DeviceCapability name?
-				capabilities.push(node.toString());
+				if (node.tagName == 'DeviceCapability') {
+					deviceCapabilities.push(node.toString());
+				} else {
+					capabilities.push(node.toString());
+				}
 			}
 		});
-		properties.Capabilities = capabilities;
+		properties.Capabilities = capabilities.concat(deviceCapabilities);
 	} else {
 		properties.Capabilities = ['<Capability Name=\"internetClient\" />'];
 	}
