@@ -27,7 +27,6 @@ namespace TitaniumWindows
 		{
 
 		public:
-			TITANIUM_PROPERTY_UNIMPLEMENTED(borderRadius);
 
 			Switch(const JSContext&) TITANIUM_NOEXCEPT;
 			virtual ~Switch()                  = default;
@@ -52,7 +51,7 @@ namespace TitaniumWindows
 			virtual void enableEvent(const std::string& event_name) TITANIUM_NOEXCEPT override final;
 
 		private:
-
+			Windows::UI::Xaml::Controls::Border^ border__ = { nullptr };
 			Windows::UI::Xaml::Controls::ToggleSwitch^ switch__ = { nullptr };
 
 			Windows::Foundation::EventRegistrationToken change_event_;

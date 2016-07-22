@@ -31,8 +31,11 @@ namespace TitaniumWindows
 				Titanium::UI::Switch::set_value(!get_value());
 			});
 
+			border__ = ref new Windows::UI::Xaml::Controls::Border();
+			border__->Child = switch__;
+
 			Titanium::UI::Switch::setLayoutDelegate<WindowsViewLayoutDelegate>();
-			getViewLayoutDelegate<WindowsViewLayoutDelegate>()->setComponent(switch__);
+			getViewLayoutDelegate<WindowsViewLayoutDelegate>()->setComponent(border__, nullptr, border__);
 		}
 
 		void Switch::JSExportInitialize() {
