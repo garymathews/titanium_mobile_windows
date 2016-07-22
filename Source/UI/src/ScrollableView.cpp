@@ -101,8 +101,11 @@ namespace TitaniumWindows
 			layoutDelegate__->set_autoLayoutForHeight(Titanium::UI::LAYOUT::FILL);
 			layoutDelegate__->set_autoLayoutForWidth(Titanium::UI::LAYOUT::FILL);
 
+			border__ = ref new Windows::UI::Xaml::Controls::Border();
+			border__->Child = scroll_viewer__;
+
 			auto layoutDelegate = getViewLayoutDelegate<WindowsViewLayoutDelegate>();
-			layoutDelegate->setComponent(scroll_viewer__);
+			layoutDelegate->setComponent(border__, nullptr, border__);
 
 			auto contentLayoutDelegate = getContentViewLayoutDelegate();
 

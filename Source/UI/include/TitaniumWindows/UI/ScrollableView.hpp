@@ -59,7 +59,6 @@ namespace TitaniumWindows
 			TITANIUM_PROPERTY_UNIMPLEMENTED(overlayEnabled);
 			TITANIUM_PROPERTY_UNIMPLEMENTED(clipViews);
 			TITANIUM_PROPERTY_UNIMPLEMENTED(hitRect);
-			TITANIUM_PROPERTY_UNIMPLEMENTED(borderRadius);
 
 			ScrollableView(const JSContext&) TITANIUM_NOEXCEPT;
 
@@ -87,6 +86,7 @@ namespace TitaniumWindows
 			virtual void set_scrollingEnabled(const bool& scrollingEnabled) TITANIUM_NOEXCEPT override;
 
 		private:
+			Windows::UI::Xaml::Controls::Border^ border__;
 			Windows::UI::Xaml::Controls::ScrollViewer^ scroll_viewer__;
 			JSObject contentView__;
 
