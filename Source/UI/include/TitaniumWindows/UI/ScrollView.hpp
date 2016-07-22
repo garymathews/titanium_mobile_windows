@@ -65,7 +65,6 @@ namespace TitaniumWindows
 			TITANIUM_PROPERTY_UNIMPLEMENTED(decelerationRate);
 			TITANIUM_PROPERTY_UNIMPLEMENTED(overScrollMode);
 			TITANIUM_PROPERTY_UNIMPLEMENTED(scrollIndicatorStyle);
-			TITANIUM_PROPERTY_UNIMPLEMENTED(borderRadius);
 
 			ScrollView(const JSContext&) TITANIUM_NOEXCEPT;
 
@@ -104,6 +103,7 @@ namespace TitaniumWindows
 			virtual void disableEvent(const std::string& event_name) TITANIUM_NOEXCEPT override final;
 
 		private:
+			Windows::UI::Xaml::Controls::Border^ border__;
 			Windows::UI::Xaml::Controls::ScrollViewer^ scroll_viewer__;
 			JSObject contentView__;
 
