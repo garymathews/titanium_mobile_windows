@@ -32,8 +32,11 @@ namespace TitaniumWindows
 			text_box__ = ref new Windows::UI::Xaml::Controls::TextBox();
 			text_box__->AcceptsReturn = true;
 
+			border__ = ref new Controls::Border();
+			border__->Child = text_box__;
+
 			Titanium::UI::TextArea::setLayoutDelegate<WindowsViewLayoutDelegate>();
-			getViewLayoutDelegate<WindowsViewLayoutDelegate>()->setComponent(text_box__);
+			getViewLayoutDelegate<WindowsViewLayoutDelegate>()->setComponent(border__, nullptr, border__);
 		}
 
 		void TextArea::JSExportInitialize() {

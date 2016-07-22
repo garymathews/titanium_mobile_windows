@@ -46,7 +46,6 @@ namespace TitaniumWindows
 			TITANIUM_PROPERTY_UNIMPLEMENTED(scrollable);
 			TITANIUM_FUNCTION_UNIMPLEMENTED(blur);
 			TITANIUM_FUNCTION_UNIMPLEMENTED(hasText);
-			TITANIUM_PROPERTY_UNIMPLEMENTED(borderRadius);
 
 			TextArea(const JSContext&) TITANIUM_NOEXCEPT;
 			virtual ~TextArea()                  = default;
@@ -81,6 +80,7 @@ namespace TitaniumWindows
 #pragma warning(disable : 4251)
 			std::unordered_map<std::string, std::string> custom_fonts__;
 #pragma warning(pop)
+			Windows::UI::Xaml::Controls::Border^ border__;
 			Windows::UI::Xaml::Controls::TextBox^ text_box__;
 
 			// Event handlers
