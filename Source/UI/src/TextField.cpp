@@ -35,18 +35,16 @@ namespace TitaniumWindows
 
 			// Parent of the text box.
 			// TextField have to deal with multiple controls. (TextBox & PasswordBox)
-			parent__ = ref new Controls::Grid();
+			border__ = ref new Controls::Border();
 
 			text_box__ = ref new Controls::TextBox();
 			text_box__->AcceptsReturn = false;
 			text_box__->IsSpellCheckEnabled = true;
 
-			parent__->Children->Append(text_box__);
-			parent__->SetColumn(text_box__, 0);
-			parent__->SetRow(text_box__, 0);
+			border__->Child = text_box__;
 
 			const auto layout = getViewLayoutDelegate<WindowsViewLayoutDelegate>();
-			layout->setComponent(parent__, text_box__);
+			layout->setComponent(border__, nullptr, border__);
 
 			initTextComponent();
 		}
@@ -81,15 +79,8 @@ namespace TitaniumWindows
 				password_box__ = ref new Controls::PasswordBox();
 				//password_box__->Foreground = ref new Media::SolidColorBrush(Windows::UI::Colors::Black);
 
-				// Remove existing text box
-				if (parent__->Children->Size > 0) {
-					parent__->Children->RemoveAt(0);
-				}
-
-				// Add password box
-				parent__->Children->Append(password_box__);
-				parent__->SetColumn(password_box__, 0);
-				parent__->SetRow(password_box__, 0);
+				// set password box
+				border__->Child = password_box__;
 
 				// copy properties which we interested in
 				password_box__->PlaceholderText = text_box__->PlaceholderText;
@@ -113,15 +104,8 @@ namespace TitaniumWindows
 				text_box__->AcceptsReturn = false;
 				text_box__->IsSpellCheckEnabled = true;
 
-				// Remove existing text box
-				if (parent__->Children->Size > 0) {
-					parent__->Children->RemoveAt(0);
-				}
-
-				// Add text box
-				parent__->Children->Append(text_box__);
-				parent__->SetColumn(text_box__, 0);
-				parent__->SetRow(text_box__, 0);
+				// set text box
+				border__->Child = text_box__;
 
 				// copy properties which we interested in
 				text_box__->PlaceholderText = password_box__->PlaceholderText;

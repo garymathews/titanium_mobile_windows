@@ -86,7 +86,7 @@ namespace TitaniumWindows
 		private:
 			void initTextComponent();
 
-			Windows::UI::Xaml::Controls::Grid^ parent__{ nullptr };
+			Windows::UI::Xaml::Controls::Border^ border__{ nullptr };
 			Windows::UI::Xaml::Controls::TextBox^ text_box__{ nullptr };
 			Windows::UI::Xaml::Controls::PasswordBox^ password_box__{ nullptr };
 
