@@ -39,7 +39,6 @@ namespace TitaniumWindows
 		class TITANIUMWINDOWS_UI_EXPORT Button final : public Titanium::UI::Button, public JSExport<Button>
 		{
 		public:
-			TITANIUM_PROPERTY_UNIMPLEMENTED(borderRadius);
 
 			Button(const JSContext&) TITANIUM_NOEXCEPT;
 
@@ -68,10 +67,8 @@ namespace TitaniumWindows
 			virtual void enableEvent(const std::string& event_name)  TITANIUM_NOEXCEPT override final;
 
 		private:
-#pragma warning(push)
-#pragma warning(disable : 4251)
+			Windows::UI::Xaml::Controls::Border^ border__;
 			Windows::UI::Xaml::Controls::Button^ button__;
-#pragma warning(pop)
 		};
 	} // namespace UI
 } // namespace TitaniumWindows
