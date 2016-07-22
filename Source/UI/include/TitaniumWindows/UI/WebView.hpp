@@ -31,7 +31,6 @@ namespace TitaniumWindows
 
 			TITANIUM_PROPERTY_UNIMPLEMENTED(scalesPageToFit);
 			TITANIUM_FUNCTION_UNIMPLEMENTED(setBasicAuthentication);
-			TITANIUM_PROPERTY_UNIMPLEMENTED(borderRadius);
 
 			WebView(const JSContext&) TITANIUM_NOEXCEPT;
 
