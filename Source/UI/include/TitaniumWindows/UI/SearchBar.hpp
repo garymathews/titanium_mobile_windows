@@ -35,7 +35,6 @@ namespace TitaniumWindows
 			TITANIUM_FUNCTION_UNIMPLEMENTED(remove);
 			TITANIUM_PROPERTY_UNIMPLEMENTED(font);
 			TITANIUM_PROPERTY_UNIMPLEMENTED(style);
-			TITANIUM_PROPERTY_UNIMPLEMENTED(borderRadius);
 
 			SearchBar(const JSContext&) TITANIUM_NOEXCEPT;
 
@@ -54,6 +53,7 @@ namespace TitaniumWindows
 			virtual void set_value(const std::string&) TITANIUM_NOEXCEPT override;
 
 		private:
+			Windows::UI::Xaml::Controls::Border^ border__;
 #if defined(IS_WINDOWS_PHONE) || defined(IS_WINDOWS_10)
 			Windows::UI::Xaml::Controls::AutoSuggestBox^ suggest_box__;
 			Windows::Foundation::Collections::IObservableVector<::Platform::String^>^ suggestItems__;

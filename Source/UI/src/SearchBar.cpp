@@ -35,6 +35,7 @@ namespace TitaniumWindows
 		void SearchBar::postCallAsConstructor(const JSContext& js_context, const std::vector<JSValue>& arguments) 
 		{
 			Titanium::UI::SearchBar::postCallAsConstructor(js_context, arguments);
+			border__ = ref new Windows::UI::Xaml::Controls::Border();
 #if defined(IS_WINDOWS_PHONE) || defined(IS_WINDOWS_10)
 			suggest_box__  = ref new AutoSuggestBox();
 			suggestItems__ = ref new Platform::Collections::Vector<Platform::String^>();
@@ -87,9 +88,9 @@ namespace TitaniumWindows
 				}
 			});
 #endif
-
+			border__->Child = suggest_box__;
 			Titanium::UI::SearchBar::setLayoutDelegate<WindowsViewLayoutDelegate>();
-			getViewLayoutDelegate<WindowsViewLayoutDelegate>()->setComponent(suggest_box__);
+			getViewLayoutDelegate<WindowsViewLayoutDelegate>()->setComponent(border__, nullptr, border__);
 		}
 
 		void SearchBar::JSExportInitialize() 
