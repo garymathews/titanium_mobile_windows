@@ -21,12 +21,14 @@ namespace TitaniumWindows
 		void Slider::postCallAsConstructor(const JSContext& js_context, const std::vector<JSValue>& arguments)
 		{
 			Titanium::UI::Slider::postCallAsConstructor(js_context, arguments);	
-			
+			border__ = ref new Windows::UI::Xaml::Controls::Border();
 			slider__ = ref new Windows::UI::Xaml::Controls::Slider();
+
+			border__->Child = slider__;
 
 			Titanium::UI::Slider::setLayoutDelegate<WindowsViewLayoutDelegate>();
 			layoutDelegate__->set_defaultWidth(Titanium::UI::LAYOUT::FILL);
-			getViewLayoutDelegate<WindowsViewLayoutDelegate>()->setComponent(slider__);
+			getViewLayoutDelegate<WindowsViewLayoutDelegate>()->setComponent(border__, nullptr, border__);
 		}
 
 		void Slider::JSExportInitialize()

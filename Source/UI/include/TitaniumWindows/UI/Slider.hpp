@@ -52,6 +52,7 @@ namespace TitaniumWindows
 			virtual void enableEvent(const std::string& event_name) TITANIUM_NOEXCEPT override final;
 
 		private:
+			Windows::UI::Xaml::Controls::Border^ border__;
 			Windows::UI::Xaml::Controls::Slider^ slider__;
 
 			// Event handlers
