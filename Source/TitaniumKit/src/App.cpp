@@ -9,6 +9,8 @@
 #include "Titanium/detail/TiImpl.hpp"
 #include "Titanium/App.hpp"
 #include "Titanium/App/Properties.hpp"
+#include "Titanium/UI/Window.hpp"
+#include "Titanium/GlobalObject.hpp"
 
 namespace Titanium
 {
@@ -257,7 +259,10 @@ namespace Titanium
 
 	void AppModule::_restart() TITANIUM_NOEXCEPT
 	{
-		TITANIUM_LOG_WARN("AppModule::_restart: Unimplemented");
+		Titanium::UI::Window::Restart();
+		const auto globalObject = get_context().get_global_object();
+		const auto globalObject_ptr = globalObject.GetPrivate<Titanium::GlobalObject>();
+		globalObject_ptr->requireModule(globalObject, "/app", true);
 	}
 
 	AppModule& AppModule::PropertiesClass(const JSClass& Properties) TITANIUM_NOEXCEPT

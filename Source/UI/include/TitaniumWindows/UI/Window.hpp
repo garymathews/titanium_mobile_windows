@@ -105,7 +105,6 @@ namespace TitaniumWindows
 #pragma warning(push)
 #pragma warning(disable : 4251)
 			Windows::UI::Xaml::Controls::Canvas^ canvas__;
-			static std::vector<std::shared_ptr<Window>> window_stack__;
 			std::shared_ptr<TitaniumWindows::UI::WindowsXaml::CommandBar> bottomAppBar__;
 			Windows::Foundation::EventRegistrationToken backpressed_event__;
 			bool is_tabgroup_container__ { false };

@@ -264,6 +264,8 @@ namespace Titanium
 
 			static void JSExportInitialize();
 
+			static void Restart() TITANIUM_NOEXCEPT;
+
 			TITANIUM_FUNCTION_DEF(close);
 			TITANIUM_FUNCTION_DEF(open);
 
@@ -328,6 +330,8 @@ namespace Titanium
 // need to be exported from a DLL.
 #pragma warning(push)
 #pragma warning(disable : 4251)
+			static std::vector<std::shared_ptr<Window>> window_stack__;
+			static bool restarting__;
 			std::string barColor__;
 			bool exitOnClose__;
 			std::unordered_set<EXTEND_EDGE> extendEdges__;
@@ -342,7 +346,6 @@ namespace Titanium
 			std::string title__;
 			std::string titleid__;
 			bool translucent__;
-
 			JSObject openWindowParams_ctor__;
 			JSObject closeWindowParams_ctor__;
 

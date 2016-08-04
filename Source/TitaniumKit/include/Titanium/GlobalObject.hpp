@@ -85,7 +85,7 @@ namespace Titanium
 
 		  @result Exported exports object of the required module (Object).
 		*/
-		virtual JSValue requireModule(const JSObject& parent, const std::string& moduleId) final;
+		virtual JSValue requireModule(const JSObject& parent, const std::string& moduleId, const bool& reload = false) final;
 
 		/*!
 		  @method

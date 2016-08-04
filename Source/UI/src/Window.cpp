@@ -24,8 +24,6 @@ namespace TitaniumWindows
 		using namespace Windows::Foundation;
 		using namespace Windows::UI::Core;
 
-		std::vector<std::shared_ptr<Window>> Window::window_stack__;
-
 		Window::Window(const JSContext& js_context) TITANIUM_NOEXCEPT
   			: Titanium::UI::Window(js_context)
 		{
@@ -163,7 +161,7 @@ namespace TitaniumWindows
 			if (window->tab__) {
 				// Current Window of active Tab will be always on top of the stack
 				if (window_stack__.size() > 0) {
-					const auto top_window = window_stack__.back();
+					const auto top_window = std::dynamic_pointer_cast<Window>(window_stack__.back());
 					if (top_window->tab__) {
 						window_stack__.pop_back();
 					}
@@ -174,9 +172,11 @@ namespace TitaniumWindows
 
 		void Window::close(const std::shared_ptr<Titanium::UI::CloseWindowParams>& params) TITANIUM_NOEXCEPT
 		{
-			// Fire blur & close event on this window
-			blur();
-			fireEvent("close");
+			if (!restarting__) {
+				// Fire blur & close event on this window
+				blur();
+				fireEvent("close");
+			}
 
 			// disable all events further because it doesn't make sense.
 			disableEvents();
@@ -218,7 +218,7 @@ namespace TitaniumWindows
 
 				} else {
 					window_stack__.pop_back();
-					const auto next_window = window_stack__.back();
+					const auto next_window = std::dynamic_pointer_cast<Window>(window_stack__.back());
 
 					if (is_last_window) {
 						ExitApp(get_context());
@@ -251,6 +251,23 @@ namespace TitaniumWindows
 
 		void Window::ExitApp(const JSContext& js_context) 
 		{
+			window_stack__.clear();
+
+			if (restarting__) {
+				try {
+					const auto rootFrame = dynamic_cast<Windows::UI::Xaml::Controls::Frame^>(Windows::UI::Xaml::Window::Current->Content);
+					if (rootFrame->CanGoBack) {
+						rootFrame->GoBack();
+					}
+					rootFrame->Navigate(Windows::UI::Xaml::Controls::Page::typeid);
+					auto page = dynamic_cast<Windows::UI::Xaml::Controls::Page^>(rootFrame->Content);
+					page->Content = ref new Windows::UI::Xaml::Controls::Canvas();
+				} catch (Platform::Exception^ e) {
+					TITANIUM_LOG_ERROR("Window.close: failed to set content for the new Window");
+				}
+				return;
+			}
+
 			JSValue Titanium_property = js_context.get_global_object().GetProperty("Titanium");
 			TITANIUM_ASSERT(Titanium_property.IsObject());
 			JSObject Titanium = static_cast<JSObject>(Titanium_property);
@@ -265,7 +282,6 @@ namespace TitaniumWindows
 			TitaniumWindows::LogForwarder::done__ = true;
 
 			// exit the app because there's no window to navigate back
-			window_stack__.clear();
 			Windows::UI::Xaml::Application::Current->Exit();
 		}
 
@@ -312,7 +328,7 @@ namespace TitaniumWindows
 
 			if (window_stack__.size() > 0) {
 				// Fire blur on the last window
-				auto lastwin = window_stack__.back();
+				auto lastwin = std::dynamic_pointer_cast<Window>(window_stack__.back());
 				lastwin->blur();
 
 				// disable all events further for the old Window

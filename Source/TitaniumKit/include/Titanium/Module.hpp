@@ -164,6 +164,19 @@ namespace Titanium
 		TITANIUM_FUNCTION_DEF(applyProperties);
 		TITANIUM_FUNCTION_DEF(fireEvent);
 
+		/*
+		* Stop firing all events, especially used when module is closed/hidden.
+		*/
+		virtual void disableEvents() TITANIUM_NOEXCEPT
+		{
+			enableEvents__ = false;
+		}
+
+		virtual void enableEvents() TITANIUM_NOEXCEPT
+		{
+			enableEvents__ = true;
+		}
+
 	protected:
 		/*!
 		  @method
@@ -192,19 +205,6 @@ namespace Titanium
 		  @result void
 		*/
 		virtual void disableEvent(const std::string& event_name) TITANIUM_NOEXCEPT;
-
-		/*
-		 * Stop firing all events, especially used when module is closed/hidden.
-		 */
-		virtual void disableEvents() TITANIUM_NOEXCEPT
-		{
-			enableEvents__ = false;
-		}
-
-		virtual void enableEvents() TITANIUM_NOEXCEPT
-		{
-			enableEvents__ = true;
-		}
 
 		template<typename T>
 		std::shared_ptr<T> get_shared_ptr_for_module()

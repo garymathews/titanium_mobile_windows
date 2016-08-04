@@ -26,6 +26,10 @@ namespace Titanium
 {
 	namespace UI
 	{
+
+		std::vector<std::shared_ptr<Window>> Window::window_stack__;
+		bool Window::restarting__(false);
+
 		Window::Window(const JSContext& js_context) TITANIUM_NOEXCEPT
 		    : View(js_context, "Ti.UI.Window"),
 		      openWindowParams_ctor__(js_context.CreateObject(JSExport<Titanium::UI::OpenWindowParams>::Class())),
@@ -51,6 +55,17 @@ namespace Titanium
 		Window::~Window() TITANIUM_NOEXCEPT
 		{
 			TITANIUM_LOG_DEBUG("Window:: dtor ", this);
+		}
+
+		void Window::Restart() TITANIUM_NOEXCEPT
+		{
+			restarting__ = true;
+			while (!window_stack__.empty()) {
+				auto window = window_stack__.at(0);
+				window->disableEvents();
+				window->close(nullptr);
+			}
+			restarting__ = false;
 		}
 
 		void Window::close(const std::shared_ptr<CloseWindowParams>& params) TITANIUM_NOEXCEPT

@@ -97,6 +97,15 @@ namespace TitaniumWindows
 					this->image__->ActualHeight
 					);
 				layout->onComponentSizeChange(rect);
+
+				// image loaded, empty toImage queue
+				if (!imageOpened__) {
+					imageOpened__ = true;
+					for (auto callback : to_image_queue__) {
+						toImage(callback, false);
+					}
+					to_image_queue__.clear();
+				}
 			});
 
 			Titanium::UI::ImageView::setLayoutDelegate<WindowsImageViewLayoutDelegate>(image__);
@@ -410,6 +419,10 @@ namespace TitaniumWindows
 
 		std::shared_ptr<Titanium::Blob> ImageView::toImage(JSObject& callback, const bool& honorScaleFactor) TITANIUM_NOEXCEPT
 		{
+			if (!imageOpened__) {
+				to_image_queue__.push_back(callback);
+				return nullptr;
+			}
 			return getViewLayoutDelegate()->toImage(callback, honorScaleFactor, get_object());
 		}
 	} // namespace UI

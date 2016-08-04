@@ -262,7 +262,7 @@ namespace Titanium
 		return js_context.CreateUndefined();
 	}
 
-	JSValue GlobalObject::requireModule(const JSObject& parent, const std::string& moduleId)
+	JSValue GlobalObject::requireModule(const JSObject& parent, const std::string& moduleId, const bool& reload)
 	{
 		TITANIUM_GLOBALOBJECT_LOCK_GUARD;
 		const auto js_context = parent.get_context();
@@ -293,7 +293,7 @@ namespace Titanium
 		}
 
 		// check if we have already loaded the module
-		if (module_cache__.find(module_path) != module_cache__.end()) {
+		if (!reload && module_cache__.find(module_path) != module_cache__.end()) {
 			return module_cache__.at(module_path);
 		}
 

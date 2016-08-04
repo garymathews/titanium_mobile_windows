@@ -109,6 +109,8 @@ namespace TitaniumWindows
 			Windows::UI::Xaml::Controls::Image^ image__{ nullptr };
 			Windows::UI::Xaml::Media::Animation::Storyboard^ storyboard__;
 			bool sizeChanged__{ true };
+			bool imageOpened__{ false };
+			std::vector<JSObject> to_image_queue__;
 
 #pragma warning(pop)
 		};
