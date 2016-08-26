@@ -310,6 +310,13 @@ function generateCapabilities(target, capabilities, deviceCapabilities) {
 				// Titanium.Network.*
 				'Network': {
 					capability: ['internetClient']
+				},
+				// Titanium.App.proximityDetection
+				'App.proximityDetection': {
+					deviceCapability: ['proximity']
+				},
+				'App.setProximityDetection': {
+					deviceCapability: ['proximity']
 				}
 			};
 
