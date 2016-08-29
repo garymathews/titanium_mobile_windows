@@ -38,7 +38,6 @@ namespace TitaniumWindows
 			TITANIUM_PROPERTY_UNIMPLEMENTED(maxRowHeight);
 			TITANIUM_PROPERTY_UNIMPLEMENTED(minRowHeight);
 			TITANIUM_PROPERTY_UNIMPLEMENTED(rowHeight);
-			TITANIUM_PROPERTY_UNIMPLEMENTED(separatorColor);
 
 			TableView(const JSContext&) TITANIUM_NOEXCEPT;
 			virtual ~TableView()                  = default;
@@ -57,6 +56,7 @@ namespace TitaniumWindows
 
 			virtual void set_sections(const std::vector<std::shared_ptr<Titanium::UI::TableViewSection>>& sections) TITANIUM_NOEXCEPT override;
 			virtual void set_data(const std::vector<JSObject>& data) TITANIUM_NOEXCEPT override;
+			virtual void set_separatorColor(const std::string& color) TITANIUM_NOEXCEPT override;
 
 			virtual void appendSection(const std::vector<std::shared_ptr<Titanium::UI::TableViewSection>>& sections, const std::shared_ptr<Titanium::UI::TableViewAnimationProperties>& animation) TITANIUM_NOEXCEPT override;
 			virtual void querySubmitted(const std::string& query) override;
@@ -97,6 +97,7 @@ namespace TitaniumWindows
 			Windows::UI::Xaml::Controls::ListView^ tableview__;
 			Windows::UI::Xaml::Data::CollectionViewSource^ collectionViewSource__;
 			Windows::Foundation::Collections::IObservableVector<::Platform::Object^>^ collectionViewItems__;
+			Windows::UI::Xaml::Media::Brush^ separatorBrush__;
 
 			Windows::Foundation::EventRegistrationToken click_event__;
 		};

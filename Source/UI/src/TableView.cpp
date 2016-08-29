@@ -57,6 +57,7 @@ namespace TitaniumWindows
 			parent__ = ref new Controls::Grid();
 			tableview__ = ref new Controls::ListView();
 			collectionViewItems__ = ref new Vector<Platform::Object^>();
+			separatorBrush__ = ref new Windows::UI::Xaml::Media::SolidColorBrush(Windows::UI::Colors::Transparent);
 
 			resetTableDataBinding();
 
@@ -202,8 +203,16 @@ namespace TitaniumWindows
 				auto view = row->get_object().GetPrivate<TitaniumWindows::UI::TableViewRow>();
 				auto rowContent = view->getViewLayoutDelegate<WindowsViewLayoutDelegate>()->getComponent();
 				TITANIUM_ASSERT(rowContent);
-				// Add as list item
-				group->Append(rowContent);
+
+				const auto panel = ref new Windows::UI::Xaml::Controls::StackPanel();
+				panel->Children->Append(rowContent);
+				const auto line = ref new Windows::UI::Xaml::Shapes::Line();
+				line->Stretch = Windows::UI::Xaml::Media::Stretch::Fill;
+				line->Stroke = separatorBrush__;
+				line->X2 = 1;
+				panel->Children->Append(line);
+				group->Append(panel);
+
 				// Add as child view to make layout engine work
 				registerTableViewRowAsLayoutNode(view);
 			}
@@ -226,6 +235,25 @@ namespace TitaniumWindows
 			}
 
 			return group;
+		}
+
+		void TableView::set_separatorColor(const std::string& color) TITANIUM_NOEXCEPT
+		{
+			Titanium::UI::TableView::set_separatorColor(color);
+			separatorBrush__ = ref new Windows::UI::Xaml::Media::SolidColorBrush(getViewLayoutDelegate<WindowsViewLayoutDelegate>()->ColorForName(color));
+
+			unbindCollectionViewSource();
+			for (size_t g = 0; g < collectionViewItems__->Size; g++) {
+				const auto group = reinterpret_cast<Vector<UIElement^>^>(collectionViewItems__->GetAt(g));
+				const auto section = model__->getSectionAtIndex(g);
+				const auto startIndex = section->hasHeader() ? 1 : 0;
+				for (size_t i = startIndex; i < group->Size - 1; i++) {
+					const auto panel = reinterpret_cast<Windows::UI::Xaml::Controls::StackPanel^>(group->GetAt(i));
+					const auto line = reinterpret_cast<Windows::UI::Xaml::Shapes::Line^>(panel->Children->GetAt(1));
+					line->Stroke = separatorBrush__;
+				}
+			}
+			bindCollectionViewSource();
 		}
 
 		void TableView::updateSection(const uint32_t& index, const std::shared_ptr<Titanium::UI::TableViewSection>& section, const std::shared_ptr<Titanium::UI::TableViewAnimationProperties>& animation) TITANIUM_NOEXCEPT
