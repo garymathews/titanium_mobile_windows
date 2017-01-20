@@ -1031,7 +1031,7 @@ namespace TitaniumWindows
 			}
 			borderColorBrush__ = ref new SolidColorBrush(ColorForName(color));
 
-			if (is_control__ || underlying_control__) {
+			if ((is_control__ || underlying_control__) && !is_border__) {
 				// Xaml::Control descendant has its own border property.
 				// Use it then, it usually works better than Xaml::Border. Note that it doesn't support border radius though...
 				const auto control = underlying_control__ ? underlying_control__ : dynamic_cast<Control^>(component__);
