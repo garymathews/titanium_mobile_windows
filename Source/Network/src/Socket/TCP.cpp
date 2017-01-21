@@ -205,6 +205,8 @@ namespace TitaniumWindows
 					}, concurrency::task_continuation_context::use_arbitrary()
 				);
 				evt.wait();
+				reader->DetachStream();
+
 				buffer->construct(data);
 				return totalBytesProcessed__ = data.size();
 			}
@@ -242,6 +244,7 @@ namespace TitaniumWindows
 					}, concurrency::task_continuation_context::use_arbitrary()
 				);
 				evt.wait();
+				writer->DetachStream();
 
 				return count;
 			}
