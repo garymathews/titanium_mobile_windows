@@ -316,17 +316,21 @@ namespace TitaniumWindows
 
 			void TCP::error(const std::string& message)
 			{
-				if (error__.IsObject()) {
-					auto error_obj = static_cast<JSObject>(error__);
-					if (error_obj.IsFunction()) {
-						const auto ctx = get_context();
-						auto args = get_context().CreateObject();
-						args.SetProperty("code", ctx.CreateNumber(-1));
-						args.SetProperty("error", ctx.CreateString(message));
-						args.SetProperty("socket", get_object());
-						args.SetProperty("success", ctx.CreateBoolean(false));
-						error_obj({args}, get_object());
+				try {
+					if (error__.IsObject()) {
+						auto error_obj = static_cast<JSObject>(error__);
+						if (error_obj.IsFunction()) {
+							const auto ctx = get_context();
+							auto args = get_context().CreateObject();
+							args.SetProperty("code", ctx.CreateNumber(-1));
+							args.SetProperty("error", ctx.CreateString(message));
+							args.SetProperty("socket", get_object());
+							args.SetProperty("success", ctx.CreateBoolean(false));
+							error_obj({args}, get_object());
+						}
 					}
+				} catch (...) {
+					// do nothing...
 				}
 			}
 		}
