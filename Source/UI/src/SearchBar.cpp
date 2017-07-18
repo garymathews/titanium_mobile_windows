@@ -59,7 +59,9 @@ namespace TitaniumWindows
 						return;
 					}
 					const auto items = suggestionRequested__(TitaniumWindows::Utility::ConvertString(sender->Text));
+					suggest_box__->ItemsSource = nullptr;
 					suggestItems__->Clear();
+					suggest_box__->ItemsSource = suggestItems__;
 					for (const auto item : items) {
 						suggestItems__->Append(TitaniumWindows::Utility::ConvertString(item));
 					}
