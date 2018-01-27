@@ -603,25 +603,33 @@ function copyResources(next) {
 					this.cli.createHook('build.windows.analyzeJsFile', this, function (from, to, ast, traverse, types, cb) {
 						this.cli.createHook('build.windows.copyResource', this, function (from, to, cb) {
 							// parse the AST
-							var r = jsanalyze.analyzeJsFile(from, {minify: this.minifyJS});
+							const transpile = this.cli.tiapp.transpile || false;
+							const originalContents = fs.readFileSync(from).toString();
+							const r = jsanalyze.analyzeJs(originalContents, {
+								filename: from,
+								minify: this.minifyJS,
+								transpile: transpile,
+								targets: {
+									safari: '10' // matches the version of jscore we use
+								}
+							});
+							const newContents = r.contents;
 
 							// we want to sort by the "to" filename so that we correctly handle file overwriting
 							this.tiSymbols[to] = r.symbols;
 
-							var dir = path.dirname(to);
-							fs.existsSync(dir) || wrench.mkdirSyncRecursive(dir);
+							this.cli.createHook('build.windows.compileJsFile', this, function (r, from, to, cb2) {
+								const dir = path.dirname(to);
+								fs.existsSync(dir) || wrench.mkdirSyncRecursive(dir);
 
-							if (this.minifyJS) {
-								this.logger.debug(__('Copying and minifying %s => %s', from.cyan, to.cyan));
-
-								this.cli.createHook('build.windows.compileJsFile', this, function (r, from, to, cb2) {
-									fs.writeFile(to, r.contents, cb2);
-								})(r, from, to, cb);
-							} else {
-								// we've already read in the file, so just write the original contents
-								this.logger.debug(__('Copying %s => %s', from.cyan, to.cyan));
-								fs.writeFile(to, r.contents, cb);
-							}
+								if (symlinkFiles && newContents === originalContents) {
+									copyFile.call(this, from, to, cb2);
+								} else {
+									// we've already read in the file, so just write the original contents
+									this.logger.debug(__('Processed %s', to.cyan));
+									fs.writeFile(to, newContents, cb2);
+								}
+							})(r, from, to, cb);
 						})(from, to, cb);
 					})(from, to, ast, traverse, types, done);
 				} catch (ex) {
