@@ -603,12 +603,11 @@ function copyResources(next) {
 					this.cli.createHook('build.windows.analyzeJsFile', this, function (from, to, ast, traverse, types, cb) {
 						this.cli.createHook('build.windows.copyResource', this, function (from, to, cb) {
 							// parse the AST
-							const transpile = this.cli.tiapp.transpile || false;
 							const originalContents = fs.readFileSync(from).toString();
 							const r = jsanalyze.analyzeJs(originalContents, {
 								filename: from,
 								minify: this.minifyJS,
-								transpile: transpile,
+								transpile: this.transpile,
 								targets: {
 									safari: '10' // matches the version of jscore we use
 								}
@@ -626,7 +625,7 @@ function copyResources(next) {
 									copyFile.call(this, from, to, cb2);
 								} else {
 									// we've already read in the file, so just write the original contents
-									this.logger.debug(__('Processed %s', to.cyan));
+									this.logger.debug(__('Copying %s => %s', from.cyan, to.cyan));
 									fs.writeFile(to, newContents, cb2);
 								}
 							})(r, from, to, cb);
