@@ -526,7 +526,7 @@ function copyResources(next) {
 				var fromContent = fs.readFileSync(from, {encoding: 'utf8'}),
 					ast;
 				try {
-					ast = babylon.parse(fromContent, { filename: from });
+					ast = babylon.parse(fromContent, { filename: from, sourceType: 'module' });
 				} catch (E) {
 					t_.logger.error(reportJSErrors(from, fromContent, E));
 					return next('Failed to parse JavaScript files.');
