@@ -621,7 +621,7 @@ function copyResources(next) {
 								const dir = path.dirname(to);
 								fs.existsSync(dir) || wrench.mkdirSyncRecursive(dir);
 
-								if (symlinkFiles && newContents === originalContents) {
+								if (newContents === originalContents) {
 									copyFile.call(this, from, to, cb2);
 								} else {
 									// we've already read in the file, so just write the original contents
