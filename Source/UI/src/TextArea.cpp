@@ -121,8 +121,10 @@ namespace TitaniumWindows
 		Titanium::UI::TextAreaSelectedParams TextArea::get_selection() const TITANIUM_NOEXCEPT
 		{
 			Titanium::UI::TextAreaSelectedParams params;
-			params.location = text_box__->SelectionStart;
-			params.length   = text_box__->SelectionLength;
+			if (text_box__) {
+				params.location = text_box__->SelectionStart;
+				params.length = text_box__->SelectionLength;
+			}
 			return params;
 		}
 
@@ -142,7 +144,10 @@ namespace TitaniumWindows
 
 		std::string TextArea::get_value() const TITANIUM_NOEXCEPT
 		{
-			return TitaniumWindows::Utility::ConvertUTF8String(text_box__->Text);
+			if (text_box__) {
+				return TitaniumWindows::Utility::ConvertUTF8String(text_box__->Text);
+			}
+			return std::string();
 		}
 
 		void TextArea::set_value(const std::string& value) TITANIUM_NOEXCEPT
