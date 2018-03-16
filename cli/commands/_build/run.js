@@ -48,6 +48,11 @@ function run(logger, config, cli, finished) {
 
 		'checkAppJs',
 		'copyResources',
+
+		function (next) {
+			cli.emit('build.pre.build', this, next);
+		},
+
 		'generateI18N',
 		'generateModuleFinder',
 		'generateAppxManifest',
@@ -57,6 +62,11 @@ function run(logger, config, cli, finished) {
 		'fixCSharpConfiguration',
 		'copyModuleOverride',
 		'compileApp',
+
+		function (next) {
+			cli.emit('build.post.build', this, next);
+		},
+
 		'writeBuildManifest',
 		'copyResultsToProject',
 
