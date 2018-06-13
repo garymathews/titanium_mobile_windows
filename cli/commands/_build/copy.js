@@ -662,7 +662,8 @@ function copyResources(next) {
 								transpile: this.transpile,
 								targets: {
 									safari: '10' // matches the version of jscore we use
-								}
+								},
+								resourcesDir: path.join(this.buildDir, 'bin', 'assets', 'Resources')
 							});
 							const newContents = r.contents;
 
