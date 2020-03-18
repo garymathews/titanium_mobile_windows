@@ -232,8 +232,12 @@ namespace TitaniumWindows
 			create_task(operation, token)
 				.then([this, token](Windows::Web::Http::HttpResponseMessage^ response) {
 				interruption_point();
+
 				readyState__ = Titanium::Network::RequestState::Opened;
-				onreadystatechange(readyState__);
+
+				RunOnUIThread([=]() {
+					onreadystatechange(readyState__);
+				});
 
 				SerializeHeaders(response);
 
@@ -248,7 +252,10 @@ namespace TitaniumWindows
 				interruption_point();
 
 				readyState__ = Titanium::Network::RequestState::Loading;
-				onreadystatechange(readyState__);
+
+				RunOnUIThread([=]() {
+					onreadystatechange(readyState__);
+				});
 				// FIXME Fire ondatastream/onsendstream callbacks throughout!
 
 				return HTTPResultAsync(stream, token);
@@ -410,11 +417,13 @@ namespace TitaniumWindows
 					});
 				}
 
-				if (contentLength__ != -1 && contentLength__ != 0) {
-					ondatastream(responseBuffer->Length / contentLength__);
-				} else {
-					ondatastream(-1.0); // chunked encoding was used
-				}
+				RunOnUIThread([=] {
+					if (contentLength__ != -1 && contentLength__ != 0) {
+						ondatastream(responseBuffer->Length / contentLength__);
+					} else {
+						ondatastream(-1.0); // chunked encoding was used
+					}
+				});
 
 				if (responseBuffer->Length) {
 					auto reader = ::Windows::Storage::Streams::DataReader::FromBuffer(responseBuffer);
@@ -478,7 +487,10 @@ namespace TitaniumWindows
 			}
 
 			readyState__ = Titanium::Network::RequestState::Headers_Received;
-			onreadystatechange(Titanium::Network::RequestState::Headers_Received);
+
+			RunOnUIThread([=] {
+				onreadystatechange(Titanium::Network::RequestState::Headers_Received);
+			});
 		}
 
 		void HTTPClient::SerializeHeaderCollection(Windows::Foundation::Collections::IIterable<Windows::Foundation::Collections::IKeyValuePair<Platform::String^, Platform::String^>^>^ headers)
