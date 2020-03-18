@@ -412,12 +412,12 @@ namespace TitaniumWindows
 
 				// Stop the timeout timer
 				if (dispatcherTimer__ != nullptr && httpClient__ != nullptr) {
-					RunOnUIThread([=] {
+					RunOnUIThread([=]() {
 						dispatcherTimer__->Stop();
 					});
 				}
 
-				RunOnUIThread([=] {
+				RunOnUIThread([=]() {
 					if (contentLength__ != -1 && contentLength__ != 0) {
 						ondatastream(responseBuffer->Length / contentLength__);
 					} else {
@@ -442,7 +442,7 @@ namespace TitaniumWindows
 
 		void HTTPClient::startDispatcherTimer()
 		{
-			RunOnUIThread([=] {
+			RunOnUIThread([=]() {
 				if (dispatcherTimer__ == nullptr && timeoutSpan__.Duration > 0) {
 					dispatcherTimer__ = ref new Windows::UI::Xaml::DispatcherTimer();
 					dispatcherTimer__->Interval = timeoutSpan__;
@@ -488,7 +488,7 @@ namespace TitaniumWindows
 
 			readyState__ = Titanium::Network::RequestState::Headers_Received;
 
-			RunOnUIThread([=] {
+			RunOnUIThread([=]() {
 				onreadystatechange(Titanium::Network::RequestState::Headers_Received);
 			});
 		}
